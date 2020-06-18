@@ -1,0 +1,9 @@
+source "https://github.com/JimiPlatform/JimiRepo.git"
+platform :ios, '8.0'
+
+target 'JMOrderCoreKitDemo' do
+
+    pod 'JMOrderCoreKit'
+
+end
+
