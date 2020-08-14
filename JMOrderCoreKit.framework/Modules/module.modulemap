@@ -1,0 +1,6 @@
+framework module JMOrderCoreKit {
+  umbrella header "JMOrderCoreKit.h"
+
+  export *
+  module * { export * }
+}
