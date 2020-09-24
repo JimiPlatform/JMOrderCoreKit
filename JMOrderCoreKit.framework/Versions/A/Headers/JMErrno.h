@@ -47,7 +47,7 @@
 
 #define JM_ERR_LIVE_PLAYING_BACK  -10100       //正在进行回放，无法操作
 #define JM_ERR_LIVE_TALK_TALKING  -10101            //有人正在对讲，无法操作
-#define JM_ERR_LIVE_MUL_LIVA_PLAY  -10102      //正在进行多人直播，无法操作
+#define JM_ERR_LIVE_MUL_LIVE_PLAY  -10102      //正在进行多人直播，无法操作
 
 #pragma mark -
 

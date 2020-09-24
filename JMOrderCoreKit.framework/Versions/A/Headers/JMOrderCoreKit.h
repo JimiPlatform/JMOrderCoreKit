@@ -35,6 +35,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// 配置WebSocket服务器
 /// @param sWebSocketUrl 服务器地址
 + (BOOL)configServer:(NSString *)sWebSocketUrl;
+/// 配置单机版TCP服务
+/// @param hosts 服务器地址
+/// @param port 服务器端口
++ (void)configTCPServer:(NSString *)hosts port:(int)port;
 
 #pragma mark -
 
@@ -55,6 +59,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param imei 设备imei
 /// @param handler 获取版本信息，是否支持多路功能
 - (BOOL)GetVersion:(NSString *)imei handler:(void (^ _Nonnull)(NSString *imei, BOOL success, NSString *version, BOOL supportMulCamera))handler;
+
+/// 发送track指令
+/// @param command 指令
+- (void)sendTrackCommand:(NSString *)command;
 
 @end
 
