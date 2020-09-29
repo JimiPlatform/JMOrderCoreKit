@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = "JMOrderCoreKit"
-  s.version = "1.0.6"
+  s.version = "1.0.8-alpha"
   s.summary = "Jimi distributed DVR for iOS at CocoaPods."
   s.license = {"type"=>"Apache License 2.0", "file"=>"LICENSE"}
   s.authors = {"Eafy"=>"lizhijian_21@163.com"}
@@ -15,5 +15,7 @@ Pod::Spec.new do |s|
   s.dependency 'JMSmartMediaPlayer'
 end
 
+#校验指令
+#pod lib lint JMOrderCoreKit.podspec --verbose --allow-warnings --use-libraries
 #发布命令
 #pod trunk push JMOrderCoreKit.podspec --verbose --allow-warnings --use-libraries
