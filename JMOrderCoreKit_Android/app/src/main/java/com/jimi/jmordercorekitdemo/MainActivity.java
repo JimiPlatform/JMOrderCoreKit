@@ -263,10 +263,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.startPlay2Btn:
-                if (hintInit(mJMOrderCamera1)) return;
-                mJMOrderCamera1.switchCamera(new OnSwitchCameraListener() {
+                if (hintInit(mJMOrderCamera2)) return;
+                mJMOrderCamera2.startPlay(new OnPlayStatusListener() {
                     @Override
-                    public void onResult(boolean success, JMError error) {
+                    public void onStatus(boolean success, JMError error) {
+                        mJMError = error;
+                        ZJLog.d("mJMOrderCamera2 startPlay---->success:" + success + " errorCode:" + error.errCode + " errorMsg:" + error.errMsg);
                         if (!success) {
                             hintError();
                         }
