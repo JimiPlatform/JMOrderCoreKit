@@ -10,7 +10,7 @@
 #import "JMOrderCamera.h"
 #import "JMOrderCoreKitEnum.h"
 #import "JMErrno.h"
-#import <JMSmartUtils/JMError.h>
+#import <JMSmartMediaPlayer/JMError.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

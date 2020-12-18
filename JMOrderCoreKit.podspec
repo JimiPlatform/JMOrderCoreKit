@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = "JMOrderCoreKit"
-  s.version = "1.0.9"
+  s.version = "1.1.0"
   s.summary = "Jimi distributed DVR for iOS at CocoaPods."
   s.license = {"type"=>"Apache License 2.0", "file"=>"LICENSE"}
   s.authors = {"Eafy"=>"lizhijian@jimilab.com"}
@@ -12,7 +12,8 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target    = '8.0'
   s.ios.vendored_framework   = 'JMOrderCoreKit.framework'
-  s.dependency 'JMSmartMediaPlayer', '~> 1.1.4'
+  s.dependency 'JMSmartMediaPlayer', '~> 1.1.5'
+  s.dependency 'JMSmartUtils', '~> 1.2.1-beta1'
 end
 
 #校验指令
