@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.homepage = "https://github.com/JimiPlatform/JMOrderCoreKit"
   s.description = "Jimi distributed DVR for iOS at CocoaPods."
   s.requires_arc = true
-  s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+  #s.xcconfig = { 'VALID_ARCHS' => 'armv7 armv7s arm64 arm64e' }
   #s.source = { :http => "http://10.0.10.85/apppublic/jimirepofile/raw/master/#{s.name}/#{s.name}-#{s.version}.zip?inline=false", :type => "zip" }
   s.source = { :git => "https://github.com/JimiPlatform/JMOrderCoreKit.git", :tag => "v#{s.version}" }
 
