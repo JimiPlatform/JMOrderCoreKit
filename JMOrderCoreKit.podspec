@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = "JMOrderCoreKit"
-  s.version = "1.1.3-beta1"
+  s.version = "1.1.4-beta1"
   s.summary = "Jimi distributed DVR for iOS at CocoaPods."
   s.license = {"type"=>"Apache License 2.0", "file"=>"LICENSE"}
   s.authors = {"Eafy"=>"lizhijian@jimilab.com"}
