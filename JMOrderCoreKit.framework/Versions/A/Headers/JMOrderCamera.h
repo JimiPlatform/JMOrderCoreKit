@@ -22,7 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,readonly) NSInteger channel;                 //Camera摄像头通道号(标识)
 @property (nonatomic,readonly) BOOL supportMulCamera;   //是否支持多路摄像头
 @property (nonatomic,assign) BOOL mute;                 //静音设置
-@property (nonatomic,assign) BOOL sniffStreamEnable;
+@property (nonatomic,assign) BOOL sniffStreamEnable;    //是否探测完整视频流(网络流最好打开)
+@property (nonatomic,assign) BOOL sslEnable;            //SSL加密使能(默认关闭)
 
 /// 初始化Camera
 /// @param imei 设备IMEI
