@@ -9,6 +9,8 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.source = { :git => "https://github.com/JimiPlatform/JMOrderCoreKit.git", :tag => "v#{s.version}" }
   #s.xcconfig = { 'VALID_ARCHS' => 'armv7 armv7s arm64 arm64e x86_64' }
+  s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'armv7 arm64 x86_64 i386' }
+  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'armv7 arm64 x86_64 i386' }
   s.xcconfig = { 'OTHER_LDFLAGS' => '-ObjC' }
 
   s.ios.deployment_target    = '9.0'
