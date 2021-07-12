@@ -17,7 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface JMOrderCamera : NSObject
 
+@property (readonly) JMMediaNetworkPlayer *player;
 @property (nonatomic,weak) id<JMMediaNetworkPlayerDelegate> _Nullable delegate;
+
 @property (nonatomic,readonly) NSString *imei;                 //设备IMEI
 @property (nonatomic,readonly) NSInteger channel;                 //Camera摄像头通道号(标识)
 @property (nonatomic,readonly) BOOL supportMulCamera;   //是否支持多路摄像头
@@ -38,8 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)deattachMonitor;
 
 /// 开始直播
-/// @param handler 回调
-- (void)startPlay:(void (^ _Nonnull)(BOOL success, JMError *_Nullable error))handler;
+/// @param handler 回调(是否是开始播放，是否成功，错误信息)
+- (void)startPlay:(void (^ _Nonnull)(BOOL isStart, BOOL success, JMError *_Nullable error))handler;
 
 /// 停止直播、历史视频播放、录像等
 - (void)stopPlay;

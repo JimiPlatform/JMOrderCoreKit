@@ -46,6 +46,8 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark -
 
 @property (nonatomic,weak) id<JMOrderCoreKitServerDelegate> _Nullable delegate;
+/// 连接状态
+@property (readonly) enum JM_SERVER_CONNET_STATE state;
 
 + (instancetype _Nullable)shared;
 
