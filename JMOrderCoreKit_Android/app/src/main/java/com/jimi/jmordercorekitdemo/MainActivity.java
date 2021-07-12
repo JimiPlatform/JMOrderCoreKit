@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -16,6 +17,8 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -23,7 +26,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.eafy.zjlog.ZJLog;
-import com.jimi.jmmonitorview.JMGLMonitor;
 import com.jimi.jmordercorekit.JMOrderCamera;
 import com.jimi.jmordercorekit.JMOrderCameraRecvCmdListener;
 import com.jimi.jmordercorekit.JMOrderCoreKit;
@@ -38,8 +40,8 @@ import com.jimi.jmordercorekit.Listener.OnVersionListener;
 import com.jimi.jmordercorekitdemo.utils.PermissionFragment;
 import com.jimi.jmordercorekitdemo.utils.PermissionListener;
 import com.jimi.jmordercorekitdemo.utils.PermissionUtil;
-import com.jimi.jmsmartutils.System.JMError;
-import com.jimi.jmsmartutils.System.JMSystem;
+import com.jimi.jmsmartutils.device.JMDevice;
+import com.jimi.jmsmartutils.system.JMError;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,8 +62,8 @@ import static com.jimi.jmsmartmediaplayer.Video.JMMediaNetworkPlayerListener.JM_
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private JMGLMonitor displaySurfaceView1;
-    private JMGLMonitor displaySurfaceView2;
+    private SurfaceView displaySurfaceView1;
+    private SurfaceView displaySurfaceView2;
     private EditText accountEditText;
     private EditText passwordEditText;
     private EditText keyEditText;
@@ -155,24 +157,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editor.commit();
     }
 
+
     private void loadConfigData() {
-        SharedPreferences sp = getSharedPreferences("SettingInfo", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        accountEditText.setText(sp.getString("account", "638286")); //638286
-        passwordEditText.setText(sp.getString("password", ""));
-        keyEditText.setText(sp.getString("key", "cd15d1aba85346128811ae17fc2a2378"));
-        secretEditText.setText(sp.getString("secret", "a7866ef45d594ea988554fe633fa987e"));
-        imeiEditText.setText(sp.getString("imei", "357730091014168")); //357730091014168
-//        serverEditText.setText(sp.getString("serverAdr", "ws://8.210.110.221:8888/websocket"));
-        serverEditText.setText(sp.getString("serverAdr", "192.168.3.119"));
-        playbackEditText.setText("2020_04_03_16_35_08_01.mp4,2020_04_03_16_36_08_01.mp4,2020_04_03_16_37_09_01.mp4,2020_04_03_16_38_09_01.mp4,2020_04_03_16_39_09_01.mp4,2020_04_03_16_40_10_01.mp4");
-
-//        accountEditText.setText("172");
-//        imeiEditText.setText("353376110005078");
-
-//        accountEditText.setText(sp.getString("account", "176542")); //638286
-//        imeiEditText.setText(sp.getString("imei", "457730090688888")); //357730091014168
-//        serverEditText.setText(sp.getString("serverAdr", "ws://8.210.110.221:8888/websocket"));
     }
 
     boolean bHint = true;
@@ -191,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
+
     @Override
     public void onClick(View view) {
         hintKeyboard();
@@ -202,16 +189,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mJMOrderCamera1.setMute(mCameraMute);
                 break;
             case R.id.switchBtn:
-//                if (hintInit(mJMOrderCamera1)) return;
-//                mJMOrderCamera1.switchCamera(new OnSwitchCameraListener() {
-//                    @Override
-//                    public void onResult(boolean success, JMError error) {
-//                        mJMError = error;
-//                        if (!success) hintError();
-//                    }
-//                });
-                deinitOrderClientKit();
-                initOrderCoreKit();
+                if (hintInit(mJMOrderCamera1)) return;
+                mJMOrderCamera1.switchCamera(new OnSwitchCameraListener() {
+                    @Override
+                    public void onResult(boolean success, JMError error) {
+                        mJMError = error;
+                        if (!success) hintError();
+                    }
+                });
+//                deinitOrderClientKit();
+//                initOrderCoreKit();
                 break;
             case R.id.startPlay1Btn:
                 if (hintInit(mJMOrderCamera1)) return;
@@ -267,11 +254,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mJMOrderCamera2.startPlay(new OnPlayStatusListener() {
                     @Override
                     public void onStatus(boolean success, JMError error) {
-                        mJMError = error;
-                        ZJLog.d("mJMOrderCamera2 startPlay---->success:" + success + " errorCode:" + error.errCode + " errorMsg:" + error.errMsg);
-                        if (!success) {
-                            hintError();
-                        }
+
                     }
                 });
                 break;
@@ -378,6 +361,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
                 break;
             case R.id.sendInstruct:
+//                JMOrderCoreKit.configUserInfo("A" + JMDevice.getIMEI(ActivityUtils.getTopActivity()));
+//                JMOrderCoreKit.configTCPServer(NetworkUtils.getServerAddressByWifi(), 21100);
                 JMOrderCoreKit.getSingleton().sendTrackCmdData(instructEditText.getText().toString().trim());
                 break;
             default:
@@ -430,20 +415,59 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return false;
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            finish();
+        }
+        return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        killAppProcess();
+    }
+
+    public void killAppProcess()
+    {
+        ActivityManager mActivityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> mList = mActivityManager.getRunningAppProcesses();
+        for (ActivityManager.RunningAppProcessInfo runningAppProcessInfo : mList)
+        {
+            if (runningAppProcessInfo.pid != android.os.Process.myPid())
+            {
+                android.os.Process.killProcess(runningAppProcessInfo.pid);
+            }
+        }
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(0);
+    }
+
     private void initOrderCoreKit() {
         if (JMOrderCoreKit.initialize() == 0) {
-            if (!serverEditText.getText().toString().isEmpty()) {
-                JMOrderCoreKit.configTCPServer(serverEditText.getText().toString(), 21100);
-            }
 
             JMOrderCoreKit.configDeveloper(keyEditText.getText().toString(), secretEditText.getText().toString(), accountEditText.getText().toString());
-            JMOrderCoreKit.configUserInfo("A" + JMSystem.getPhoneIMEI(getApplicationContext()).substring(1));
+            if (!serverEditText.getText().toString().isEmpty()) {
+//                JMOrderCoreKit.configTCPServer(NetworkUtils.getServerAddressByWifi(), 21100);
+//                JMOrderCoreKit.configTCPServer(serverEditText.getText().toString(), 21100);
+                JMOrderCoreKit.configServer(serverEditText.getText().toString());
+            }
+
+            JMOrderCoreKit.configUserInfo("A" + JMDevice.getIMEI(this));
             JMOrderCoreKit.getSingleton().setServerListener(mJMOrderCoreKitServerListener);
             JMOrderCoreKit.getSingleton().connect();
 
             if (mJMOrderCamera1 == null) {
                 mJMOrderCamera1 = new JMOrderCamera(getApplicationContext(), imeiEditText.getText().toString(), 0);
+                mJMOrderCamera1.setSslEnable(true);
                 mJMOrderCamera1.attachGLMonitor(displaySurfaceView1);
+            }
+            if (mJMOrderCamera2 == null) {
+                mJMOrderCamera2 = new JMOrderCamera(getApplicationContext(), imeiEditText.getText().toString(), 1);
+                mJMOrderCamera2.attachGLMonitor(displaySurfaceView2);
+                mJMOrderCamera2.setMute(true);
             }
         }
     }
@@ -455,11 +479,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mJMOrderCamera1.deattachMonitor();
                 mJMOrderCamera1 = null;
             }
-//            if (mJMOrderCamera2 != null) {
-//                mJMOrderCamera2.release();
-//                mJMOrderCamera2.deattachMonitor();
-//                mJMOrderCamera2 = null;
-//            }
+            if (mJMOrderCamera2 != null) {
+                mJMOrderCamera2.release();
+                mJMOrderCamera2.deattachMonitor();
+                mJMOrderCamera2 = null;
+            }
         }
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -503,21 +527,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onResult(String imei, boolean success, String version, boolean supportMulCamera) {
                         if (success) {
                             mSupportMulCamera = supportMulCamera;
-//                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    if (mSupportMulCamera) {    //设备支持多Camera同时播放
-//                                        displaySurfaceView2.bringToFront();
-//                                        if (mJMOrderCamera2 == null) {
-//                                            mJMOrderCamera2 = new JMOrderCamera(getApplicationContext(), imeiEditText.getText().toString(), 1);
-//                                            mJMOrderCamera2.attachGLMonitor(displaySurfaceView2);
-//                                            mJMOrderCamera2.setMute(true);
-//                                        }
-//                                    } else {
-//                                        displaySurfaceView2.setVisibility(View.GONE);
-//                                    }
-//                                }
-//                            });
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (mSupportMulCamera) {    //设备支持多Camera同时播放
+                                        displaySurfaceView2.bringToFront();
+                                        if (mJMOrderCamera2 == null) {
+                                            mJMOrderCamera2 = new JMOrderCamera(getApplicationContext(), imeiEditText.getText().toString(), 1);
+                                            mJMOrderCamera2.attachGLMonitor(displaySurfaceView2);
+                                            mJMOrderCamera2.setMute(true);
+                                        }
+                                    } else {
+                                        displaySurfaceView2.setVisibility(View.GONE);
+                                    }
+                                }
+                            });
                         }
                     }
                 });
